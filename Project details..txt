@@ -1,0 +1,1126 @@
+You are a senior Python developer, data scientist, ML engineer, and Streamlit developer.
+
+I want you to build a complete, professional, interview-ready project called:
+
+"Telecom Network Health & Intelligent Fault Prediction System"
+
+The project is designed for a Telecom Network Analyst Engineer role at a telecom infrastructure and network services company.
+
+IMPORTANT:
+- Build a REAL working project.
+- Do not create fake buttons or placeholder functionality.
+- Every dashboard, model, prediction, chart, data-processing step and report must actually work.
+- Use Python 3.10.
+- The application must run locally and deploy successfully on Streamlit Community Cloud.
+- Do not use paid APIs.
+- Do not use Gemini, Claude, OpenAI API, or any other paid AI API.
+- Use only open-source Python libraries and the public TelecomTS dataset.
+- Keep the project beginner-friendly enough for me to explain in a technical interview.
+- The code must be clean, modular and well documented.
+- Do not add technologies that are unnecessary.
+- Do not claim that the dataset belongs to Zenus Group. Clearly describe it as a public telecom/5G dataset used to build a prototype.
+
+==================================================
+1. PROJECT OBJECTIVE
+==================================================
+
+Build a web-based telecom network monitoring and intelligent fault-analysis system.
+
+The system should:
+
+1. Load the TelecomTS dataset from Hugging Face.
+2. Explore telecom KPI data.
+3. Preprocess the data.
+4. Analyze network KPIs.
+5. Detect abnormal network behavior.
+6. Classify/predict network conditions where the available labels support it.
+7. Generate a Network Health Score.
+8. Identify high-risk network samples/sites/records.
+9. Display interactive dashboards.
+10. Provide possible causes and recommended troubleshooting actions.
+11. Allow users to upload compatible KPI CSV data.
+12. Allow users to download analysis results.
+13. Work completely without paid APIs.
+14. Be deployable on Streamlit Community Cloud.
+
+The project should demonstrate skills in:
+
+- Python
+- Pandas
+- NumPy
+- Data preprocessing
+- Exploratory Data Analysis
+- Machine Learning
+- Network KPI analysis
+- Anomaly detection
+- Data visualization
+- Streamlit
+- Problem solving
+- Network troubleshooting concepts
+
+==================================================
+2. DATASET
+==================================================
+
+Use:
+
+Dataset:
+AliMaatouk/TelecomTS
+
+Hugging Face:
+https://huggingface.co/datasets/AliMaatouk/TelecomTS
+
+IMPORTANT DATASET LOADING REQUIREMENT:
+
+Do NOT rely only on:
+
+from datasets import load_dataset
+ds = load_dataset("AliMaatouk/TelecomTS")
+
+Instead use the recommended loading structure:
+
+from datasets import load_dataset
+
+ds = load_dataset(
+    "AliMaatouk/TelecomTS",
+    data_files={"full": "**/chunked.jsonl"}
+)
+
+print(ds)
+
+Then inspect:
+
+sample = ds["full"][0]
+
+print(sample.keys())
+print(sample)
+
+IMPORTANT:
+Do not assume that the dataset is a normal flat CSV.
+
+The dataset contains nested/structured information. Inspect the actual structure before building the preprocessing pipeline.
+
+The expected dataset information may include fields such as:
+
+- id
+- start_time
+- end_time
+- sampling_rate
+- KPIs
+- description
+- anomalies
+- statistics
+- labels
+- QnA
+
+Do NOT blindly assume exact nested structures.
+
+Write code that inspects the actual dataset schema and safely extracts available information.
+
+==================================================
+3. DATA LOADING STRATEGY
+==================================================
+
+Create:
+
+src/data_loader.py
+
+Responsibilities:
+
+- Load TelecomTS from Hugging Face.
+- Handle dataset download.
+- Display useful loading messages.
+- Inspect schema.
+- Convert relevant structured KPI information into a Pandas DataFrame.
+- Handle missing fields safely.
+- Avoid crashing if a particular optional field is not available.
+- Provide functions such as:
+
+load_telecom_dataset()
+inspect_dataset()
+extract_kpi_dataframe()
+
+Use caching where appropriate.
+
+Example:
+
+@st.cache_data
+def load_telecom_dataset():
+    ...
+
+IMPORTANT:
+Do not load the full large dataset repeatedly every time Streamlit reruns.
+
+Use Streamlit caching appropriately.
+
+==================================================
+4. PROJECT DIRECTORY STRUCTURE
+==================================================
+
+Create the following structure:
+
+telecom-network-health/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── runtime.txt
+├── .gitignore
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_loader.py
+│   ├── preprocessing.py
+│   ├── eda.py
+│   ├── feature_engineering.py
+│   ├── anomaly_detection.py
+│   ├── model_training.py
+│   ├── prediction.py
+│   ├── network_health.py
+│   ├── recommendations.py
+│   └── utils.py
+│
+├── models/
+│   └── .gitkeep
+│
+├── data/
+│   └── .gitkeep
+│
+└── screenshots/
+    └── .gitkeep
+
+Do not commit the full 1+ GB dataset into GitHub.
+
+The application should download/load the dataset from Hugging Face when needed.
+
+==================================================
+5. STREAMLIT APPLICATION
+==================================================
+
+Create a professional Streamlit application.
+
+Main file:
+
+app.py
+
+Use Streamlit.
+
+The sidebar should contain:
+
+1. Home
+2. Dataset Overview
+3. Network KPI Dashboard
+4. EDA
+5. Anomaly Detection
+6. ML Prediction
+7. Network Health
+8. Fault Analysis
+9. Upload KPI Data
+10. Reports
+11. About Project
+
+Use:
+
+st.sidebar.radio()
+
+or a similar clean navigation system.
+
+==================================================
+6. HOME PAGE
+==================================================
+
+Create a professional landing page.
+
+Title:
+
+Telecom Network Health & Intelligent Fault Prediction System
+
+Subtitle:
+
+"Monitor network KPIs, detect abnormal behavior, analyze network health and predict potential network issues."
+
+Display cards:
+
+- Total Records
+- Number of KPIs
+- Anomalies Detected
+- Critical Records
+- Average Network Health Score
+
+Add a short project explanation.
+
+Add:
+
+"Public Telecom Dataset: TelecomTS"
+
+IMPORTANT:
+Clearly state:
+
+"This project is an independent prototype developed using a public telecom dataset. It is not connected to Zenus Group's internal network systems or data."
+
+==================================================
+7. DATASET OVERVIEW PAGE
+==================================================
+
+Display:
+
+- Number of records
+- Number of features
+- Dataset fields
+- Data types
+- Missing values
+- Duplicate records
+- Sample rows
+- KPI availability
+
+Create:
+
+- DataFrame preview
+- Dataset statistics
+- Download button
+
+Use:
+
+st.download_button()
+
+Allow the user to download the processed dataset as CSV.
+
+==================================================
+8. KPI DASHBOARD
+==================================================
+
+Build an interactive telecom KPI dashboard.
+
+Where available, analyze:
+
+- Latency
+- Throughput
+- Packet loss
+- Call drop
+- Network traffic
+- Connected users
+- Signal-related KPIs
+- Resource utilization
+- Other available TelecomTS KPIs
+
+IMPORTANT:
+Only display KPIs that actually exist in the extracted dataset.
+
+Do NOT create fake KPI values.
+
+For each KPI:
+
+- Average
+- Minimum
+- Maximum
+- Median
+- Standard deviation
+
+Use Plotly for interactive charts.
+
+Charts:
+
+1. KPI distribution
+2. KPI over time
+3. KPI comparison
+4. KPI correlation
+5. KPI box plot
+
+==================================================
+9. NETWORK HEALTH SCORE
+==================================================
+
+Create a Network Health Score from 0 to 100.
+
+The score should be calculated using available KPI information.
+
+IMPORTANT:
+Do not use arbitrary hidden scoring.
+
+Show the user how the score is calculated.
+
+Example concept:
+
+Start at 100.
+
+Reduce score for abnormal values.
+
+For example:
+
+- High latency → penalty
+- High packet loss → penalty
+- Low throughput → penalty
+- High error rate → penalty
+- Poor availability → penalty
+
+But only apply a penalty if that KPI actually exists.
+
+Make thresholds configurable in the application.
+
+Display:
+
+90–100 = Healthy
+70–89 = Good
+50–69 = Warning
+0–49 = Critical
+
+Clearly label these as project-defined thresholds, not official telecom industry standards.
+
+Display:
+
+Health Score
+Status
+Main contributing KPIs
+
+==================================================
+10. ANOMALY DETECTION
+==================================================
+
+Build an anomaly detection module.
+
+Use unsupervised ML where appropriate.
+
+Recommended model:
+
+Isolation Forest
+
+Use Scikit-learn.
+
+Pipeline:
+
+KPI data
+↓
+Handle missing values
+↓
+Select numeric KPI features
+↓
+Scale data where appropriate
+↓
+Isolation Forest
+↓
+Anomaly score
+↓
+Normal / Anomaly
+
+Allow the user to change:
+
+Contamination
+
+Example:
+
+0.01
+0.05
+0.10
+
+Show:
+
+- Number of anomalies
+- Percentage of anomalies
+- Anomaly score distribution
+- Anomaly records
+- KPI values for anomalous records
+
+Use red/orange/green indicators.
+
+Do not hard-code fake anomaly results.
+
+==================================================
+11. ML PREDICTION
+==================================================
+
+Use supervised machine learning ONLY if the dataset contains a suitable target label.
+
+First inspect:
+
+labels
+
+and available label fields.
+
+If a useful classification target exists:
+
+Build models such as:
+
+1. Logistic Regression
+2. Random Forest
+3. XGBoost ONLY if easy and compatible
+4. Gradient Boosting
+
+However, avoid unnecessary dependency problems.
+
+Prefer:
+
+- Logistic Regression
+- Random Forest
+- Gradient Boosting
+
+Compare:
+
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- ROC-AUC when possible
+- Confusion Matrix
+
+Use train_test_split with stratification when appropriate.
+
+Show model comparison in a table.
+
+Select the model based on F1-score or another clearly stated metric.
+
+Do not claim that a model is "best" without showing its metric.
+
+Save the trained model only if useful.
+
+==================================================
+12. PREDICTION PAGE
+==================================================
+
+Allow the user to enter/select KPI values.
+
+Example fields should be generated dynamically from available numeric features.
+
+The application should return:
+
+Prediction
+Probability if available
+Risk level
+Network health score
+Important contributing KPIs
+Recommended action
+
+Example:
+
+Prediction:
+"Potential Network Issue"
+
+Risk:
+"High"
+
+Possible reason:
+"High latency and abnormal traffic pattern"
+
+Recommended action:
+"Check network congestion and transmission/backhaul performance."
+
+IMPORTANT:
+Recommendations must be rule-based and clearly described as suggestions.
+
+Do not pretend the system has access to actual network equipment.
+
+==================================================
+13. FAULT ANALYSIS
+==================================================
+
+Create a fault analysis page.
+
+Possible categories:
+
+1. Network Congestion
+2. High Latency
+3. Packet Loss
+4. Low Throughput
+5. RF-related issue
+6. Transmission/Backhaul issue
+7. General Network Anomaly
+
+IMPORTANT:
+Only classify a category when the available KPI evidence supports the rule.
+
+Create a transparent rule engine.
+
+Example:
+
+IF latency is high
+AND packet loss is high
+THEN:
+Possible connectivity/transmission problem.
+
+IF traffic/load is high
+AND throughput is decreasing
+THEN:
+Possible congestion.
+
+IF radio/signal KPI is poor
+AND call-related KPI is abnormal
+THEN:
+Possible RF-related issue.
+
+Display:
+
+Detected issue
+Evidence
+Possible cause
+Recommended next check
+
+Do not claim definitive root cause.
+
+Use wording:
+
+"Possible cause"
+
+instead of:
+
+"Confirmed cause"
+
+==================================================
+14. TROUBLESHOOTING RECOMMENDATIONS
+==================================================
+
+Create:
+
+src/recommendations.py
+
+The system should generate simple recommendations.
+
+Examples:
+
+High latency:
+"Check routing path, congestion and transmission/backhaul performance."
+
+High packet loss:
+"Check link quality, congestion, interface errors and connectivity."
+
+Low throughput:
+"Check traffic load, bandwidth availability and network configuration."
+
+High user load:
+"Check cell/resource utilization and congestion."
+
+RF-related abnormal KPI:
+"Check signal quality, interference and radio configuration."
+
+IMPORTANT:
+These are troubleshooting suggestions, not automated commands.
+
+==================================================
+15. EDA PAGE
+==================================================
+
+Create a complete but efficient EDA section.
+
+Show:
+
+1. Dataset shape
+2. Missing values
+3. Duplicate records
+4. Numeric statistics
+5. KPI distributions
+6. Correlation matrix
+7. Time-series plots where timestamps exist
+8. Outlier analysis
+
+Use Plotly.
+
+Do not generate hundreds of charts.
+
+Focus on useful telecom KPIs.
+
+==================================================
+16. UPLOAD KPI DATA
+==================================================
+
+Allow the user to upload a CSV.
+
+Expected concept:
+
+CSV
+↓
+Validate columns
+↓
+Identify numeric KPI columns
+↓
+Preprocess
+↓
+Network Health Score
+↓
+Anomaly Detection
+↓
+Dashboard
+
+The application must not crash if uploaded CSV has different columns.
+
+Show:
+
+"Detected numeric KPI columns"
+
+and allow the user to select which columns represent KPI features.
+
+==================================================
+17. REPORT GENERATION
+==================================================
+
+Create a report page.
+
+Show:
+
+Network Health Summary
+
+- Total records
+- Healthy
+- Warning
+- Critical
+- Anomalies
+- Average KPI values
+- Highest-risk records
+- Recommended actions
+
+Allow CSV download.
+
+If PDF generation is easy and reliable, provide a PDF report using ReportLab.
+
+Do not add unnecessary dependencies if they cause deployment problems.
+
+==================================================
+18. MODEL TRAINING
+==================================================
+
+Do not train expensive models every time the user changes a Streamlit page.
+
+Use:
+
+@st.cache_resource
+
+for trained ML models when appropriate.
+
+For example:
+
+@st.cache_resource
+def train_anomaly_model(data):
+    ...
+
+For supervised models:
+
+@st.cache_resource
+def train_models(X, y):
+    ...
+
+Display a progress indicator.
+
+If the dataset is large:
+
+- Sample data for interactive EDA if necessary.
+- Explain when sampling is used.
+- Do not silently modify the dataset.
+
+==================================================
+19. PERFORMANCE
+==================================================
+
+This is VERY IMPORTANT.
+
+TelecomTS is a large dataset.
+
+The application must:
+
+- Use caching
+- Avoid downloading the dataset repeatedly
+- Avoid unnecessary copies
+- Avoid huge Plotly charts
+- Use sampling for visualization where appropriate
+- Keep the app responsive
+- Avoid loading all data repeatedly
+
+Use:
+
+st.cache_data
+
+and:
+
+st.cache_resource
+
+where appropriate.
+
+==================================================
+20. ERROR HANDLING
+==================================================
+
+Add proper error handling.
+
+If dataset loading fails:
+
+Show:
+
+"Unable to load TelecomTS. Please check your internet connection or Hugging Face availability."
+
+Do not show a Python traceback to normal users.
+
+If required KPI data is missing:
+
+Show a clear message.
+
+Example:
+
+"This KPI is not available in the current dataset."
+
+Do not create fake values.
+
+==================================================
+21. REQUIREMENTS.TXT
+==================================================
+
+Create a deployment-friendly requirements.txt.
+
+Use Python 3.10-compatible versions.
+
+Prefer a minimal dependency list such as:
+
+streamlit
+pandas
+numpy
+scikit-learn
+datasets
+huggingface_hub
+plotly
+pyarrow
+openpyxl
+
+Only add additional libraries if the project actually needs them.
+
+Avoid unnecessary packages.
+
+==================================================
+22. STREAMLIT DEPLOYMENT
+==================================================
+
+The final project MUST be ready for:
+
+Streamlit Community Cloud.
+
+Main file:
+
+app.py
+
+The project should run with:
+
+streamlit run app.py
+
+Create:
+
+runtime.txt
+
+with:
+
+python-3.10
+
+If Streamlit currently recommends another supported Python 3.10 patch version, use a compatible Python 3.10 version.
+
+IMPORTANT:
+Do not use a local absolute path.
+
+Do not write:
+
+C:/Users/...
+D:/...
+/home/user/...
+
+The dataset must be loaded from Hugging Face.
+
+==================================================
+23. GITHUB DEPLOYMENT INSTRUCTIONS
+==================================================
+
+Create a README section:
+
+STEP 1:
+Create GitHub repository.
+
+STEP 2:
+Upload:
+
+app.py
+requirements.txt
+runtime.txt
+src/
+README.md
+
+Do not upload:
+
+large dataset files
+virtual environment
+__pycache__
+model cache
+temporary files
+
+STEP 3:
+Go to Streamlit Community Cloud.
+
+STEP 4:
+Connect GitHub.
+
+STEP 5:
+Select repository.
+
+STEP 6:
+Select:
+
+app.py
+
+STEP 7:
+Deploy.
+
+Include troubleshooting instructions.
+
+==================================================
+24. .GITIGNORE
+==================================================
+
+Create:
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+data/*
+models/*.pkl
+models/*.joblib
+*.log
+.DS_Store
+
+==================================================
+25. README
+==================================================
+
+Write a professional README.
+
+Include:
+
+Project title
+
+Overview
+
+Problem statement
+
+Objectives
+
+Features
+
+Dataset
+
+Dataset source
+
+Architecture
+
+Technology stack
+
+Machine learning methods
+
+Network KPI concepts
+
+Project workflow
+
+Installation
+
+Running locally
+
+Deployment on Streamlit
+
+Project limitations
+
+Future improvements
+
+Interview explanation
+
+IMPORTANT:
+Clearly state:
+
+"TelecomTS is a public dataset. This project is an independent prototype and is not connected to Zenus Group's internal network data or infrastructure."
+
+==================================================
+26. PROJECT LIMITATIONS
+==================================================
+
+Add a clear limitations section.
+
+Say:
+
+- This is a prototype.
+- It does not connect to live telecom equipment.
+- It does not access Zenus internal systems.
+- Predictions depend on available public dataset features.
+- Fault causes are possible explanations, not confirmed root causes.
+- KPI thresholds are project-defined unless supported by dataset context.
+- Real telecom deployment would require integration with actual NMS/OSS systems and operational data.
+
+==================================================
+27. SECURITY
+==================================================
+
+Do not include:
+
+API keys
+passwords
+database credentials
+private tokens
+
+Do not require secrets for the basic application.
+
+==================================================
+28. UI DESIGN
+==================================================
+
+Create a clean professional dashboard.
+
+Use:
+
+- Sidebar navigation
+- Metric cards
+- Tabs
+- Expanders
+- Plotly charts
+- Data tables
+- Status indicators
+
+The interface should look like a real network operations dashboard.
+
+Use a professional telecom-style design.
+
+Do not overuse animations.
+
+==================================================
+29. FINAL TESTING
+==================================================
+
+Before saying the project is complete, test:
+
+1. Python syntax
+2. Import errors
+3. Dataset loading
+4. Data extraction
+5. EDA
+6. KPI dashboard
+7. Anomaly detection
+8. ML model
+9. Prediction
+10. CSV upload
+11. CSV download
+12. Streamlit startup
+13. Missing-value handling
+14. Empty-data handling
+15. Deployment requirements
+
+Run:
+
+python -m py_compile app.py
+
+and compile all Python files under src/.
+
+Then run:
+
+streamlit run app.py
+
+Fix all errors before finishing.
+
+==================================================
+30. IMPORTANT IMPLEMENTATION RULE
+==================================================
+
+Do not make assumptions about TelecomTS's nested data structure.
+
+FIRST inspect the dataset.
+
+Use:
+
+from datasets import load_dataset
+
+ds = load_dataset(
+    "AliMaatouk/TelecomTS",
+    data_files={"full": "**/chunked.jsonl"}
+)
+
+print(ds)
+
+sample = ds["full"][0]
+
+print(sample.keys())
+print(sample)
+
+Then design the extraction code based on the actual structure.
+
+If the dataset structure differs from the expected fields, adapt the code automatically.
+
+Do not invent fields.
+
+Do not invent KPI values.
+
+Do not invent labels.
+
+==================================================
+31. INTERVIEW-FRIENDLY EXPLANATION
+==================================================
+
+Create a section in README called:
+
+"How I explain this project in an interview"
+
+Use this explanation:
+
+"I developed a Telecom Network Health and Intelligent Fault Prediction System using Python and Streamlit. I used a public 5G telecom dataset containing network KPI information. The system analyzes network KPIs, detects abnormal behavior using machine learning, calculates a network health score, and provides possible troubleshooting suggestions. I used Pandas for data processing, Scikit-learn for machine learning, Plotly for visualization and Streamlit for the dashboard. The project helped me understand how network performance metrics can be analyzed to identify potential problems."
+
+Also prepare short answers for:
+
+Why did you choose this project?
+
+Why did you use TelecomTS?
+
+Why Python?
+
+Why Streamlit?
+
+Why Isolation Forest?
+
+What is latency?
+
+What is throughput?
+
+What is packet loss?
+
+What is network congestion?
+
+What is a KPI?
+
+What is anomaly detection?
+
+How does your health score work?
+
+How can this help a telecom company?
+
+What are the limitations?
+
+==================================================
+32. FINAL OUTPUT
+==================================================
+
+After implementing everything, provide:
+
+1. Complete project files
+2. Folder structure
+3. requirements.txt
+4. runtime.txt
+5. README.md
+6. .gitignore
+7. app.py
+8. All src files
+9. Local installation instructions
+10. Streamlit deployment instructions
+11. Testing instructions
+12. Interview explanation
+
+Do not stop after creating only the frontend.
+
+The final application must actually load the TelecomTS dataset and perform real data analysis.
+
+START BY:
+1. Inspecting the TelecomTS dataset structure.
+2. Creating the project structure.
+3. Implementing the data loader.
+4. Testing dataset loading.
+5. Implementing preprocessing.
+6. Implementing KPI analysis.
+7. Implementing anomaly detection.
+8. Implementing ML prediction where labels support it.
+9. Implementing the Streamlit dashboard.
+10. Testing the complete application.
+11. Preparing deployment files.
+12. Writing the README.

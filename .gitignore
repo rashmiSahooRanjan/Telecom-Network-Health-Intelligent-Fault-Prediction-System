@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+data/*
+!data/.gitkeep
+!data/telecomts_sample.csv
+models/*.pkl
+models/*.joblib
+!models/.gitkeep
+*.log
+.DS_Store
