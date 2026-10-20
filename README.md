@@ -344,6 +344,11 @@ streamlit run app.py
 Open your browser to **`http://localhost:8501`**.
 
 ---
+## 👨‍💻 Authors
+
+| Name                          | Role      |
+| ----------------------------- | --------- |
+| **Rashmi Ranjan Sahoo** |  Developer |
 
 ## 11. Streamlit Community Cloud Deployment Guide
 
